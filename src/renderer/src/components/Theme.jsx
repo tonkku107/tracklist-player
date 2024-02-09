@@ -4,6 +4,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { CssBaseline, IconButton, Tooltip, useMediaQuery } from '@mui/material';
 import { alpha, createTheme, getContrastRatio, responsiveFontSizes } from '@mui/material/styles';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import '../font.css';
 
 const getTheme = mode => {
   const rssColor = '#ee802f';
