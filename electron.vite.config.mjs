@@ -6,7 +6,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 let commit;
 try {
-  commit = execSync(`git describe --always --dirty`).toString();
+  commit = execSync(`git describe --always --exclude '*' --dirty`).toString();
 } catch (e) {
   commit = e.stderr.toString();
 }
