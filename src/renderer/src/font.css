@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Gotham Bold';
+  src: local('Gotham Bold'), local('Gotham-Bold');
+}
+
+@font-face {
+  font-family: 'Gotham Book';
+  src: local('Gotham Book'), local('Gotham-Book');
+}
