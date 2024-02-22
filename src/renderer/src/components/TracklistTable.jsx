@@ -12,7 +12,7 @@ export default function TracklistTable({ tracklist }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {tracklist.map(t => (
+          {tracklist?.map(t => (
             <TableRow key={t.timestamp}>
               <TableCell>{t.timestamp}</TableCell>
               <TableCell>{t.artist}</TableCell>
