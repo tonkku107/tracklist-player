@@ -1,5 +1,5 @@
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useStore from '../components/Store';
 import TracklistTable from '../components/TracklistTable';
@@ -13,6 +13,12 @@ export function Component() {
   const [editing, setEditing] = useState(!track?.tracklist);
   const [input, setInput] = useState(track?.rawTracklist);
   const [hidden, setHidden] = useState(!track?.tracklistManuallyEdited);
+
+  useEffect(() => {
+    setEditing(!track?.tracklist);
+    setInput(track?.rawTracklist);
+    setHidden(!track?.tracklistManuallyEdited);
+  }, [track]);
 
   const save = useCallback(() => {
     const tracklist = parseTracklist(input);
