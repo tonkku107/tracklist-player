@@ -13,7 +13,9 @@ try {
 
 const define = {
   __VERSION__: JSON.stringify(process.env.npm_package_version),
-  __REPO__: JSON.stringify(process.env.npm_package_repository_url),
+  __REPO__: JSON.stringify(
+    process.env.npm_package_repository_url.substring(0, process.env.npm_package_repository_url.length - 4)
+  ),
   __COMMIT__: JSON.stringify(commit.trim()),
   __CONTRIBUTORS__: JSON.stringify(
     Object.entries(process.env)

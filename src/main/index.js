@@ -6,13 +6,16 @@ import { autoUpdater } from 'electron-updater';
 import { join } from 'path';
 import icon from '../../resources/icon.png?asset';
 
+autoUpdater.autoDownload = false;
+
 const store = new Store();
 if (store.has('theme')) {
   nativeTheme.themeSource = store.get('theme');
 }
 
+let mainWindow;
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
     autoHideMenuBar: true,
@@ -38,6 +41,10 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
   });
 
   mainWindow.webContents.setWindowOpenHandler(details => {
@@ -94,7 +101,28 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
+});
+
+autoUpdater.on('update-available', info => {
+  mainWindow?.webContents.send('update-available', info);
+});
+
+autoUpdater.on('download-progress', progress => {
+  mainWindow?.webContents.send('download-progress', progress);
+});
+
+autoUpdater.on('update-downloaded', () => {
+  mainWindow?.webContents.send('update-downloaded');
+});
+
+autoUpdater.on('error', error => {
+  console.error(error);
+  mainWindow?.webContents.send('update-error');
+});
+
+ipcMain.on('download-update', () => {
+  autoUpdater.downloadUpdate();
 });
 
 app.on('window-all-closed', () => {

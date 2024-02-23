@@ -20,7 +20,7 @@ export function Component() {
   };
 
   return (
-    <Stack justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
+    <Stack justifyContent="center" alignItems="center" sx={{ height: '100%', position: 'relative' }}>
       <Box sx={{ position: 'absolute', right: '24px', top: '24px' }}>
         <ThemeToggle />
       </Box>

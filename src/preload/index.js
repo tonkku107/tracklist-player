@@ -6,6 +6,7 @@ const api = {
     toggle: () => ipcRenderer.invoke('theme:toggle'),
     system: () => ipcRenderer.invoke('theme:system'),
   },
+  downloadUpdate: () => ipcRenderer.send('download-update'),
 };
 
 if (process.contextIsolated) {
