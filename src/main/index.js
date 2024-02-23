@@ -2,6 +2,7 @@
 import { is, optimizer } from '@electron-toolkit/utils';
 import { BrowserWindow, Menu, app, ipcMain, nativeTheme, shell } from 'electron';
 import Store from 'electron-store';
+import { autoUpdater } from 'electron-updater';
 import { join } from 'path';
 import icon from '../../resources/icon.png?asset';
 
@@ -92,6 +93,8 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on('window-all-closed', () => {
