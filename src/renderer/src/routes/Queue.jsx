@@ -1,6 +1,8 @@
-import { Button, Divider, List, Stack, Tooltip, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { Button, Divider, Stack, Tooltip, Typography } from '@mui/material';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import DraggableItem from '../components/DraggableItem';
+import DroppableList from '../components/DroppableList';
 import FileInput from '../components/FileInput';
 import ListTrack from '../components/ListTrack';
 import RssButton from '../components/RssButton';
@@ -16,30 +18,44 @@ export function Component() {
     if (!store.queue || store.queue.size === 0) navigate('/');
   }, [store.queue, navigate]);
 
-  const onFiles = async files => {
-    for (const file of files) {
-      const track = await processFile(file);
-      dispatch({ type: 'ADD_TRACK_TO_QUEUE', track });
-    }
-  };
+  const onFiles = useCallback(
+    async files => {
+      for (const file of files) {
+        const track = await processFile(file);
+        dispatch({ type: 'ADD_TRACK_TO_QUEUE', track });
+      }
+    },
+    [dispatch]
+  );
 
-  const canProceed = [...(store?.queue?.values() ?? [])].every(t => !!t.tracklist);
+  const onDragEnd = useCallback(
+    result => {
+      const { source, destination } = result;
+      dispatch({ type: 'MOVE_TRACK', source: source.index, destination: destination?.index });
+    },
+    [dispatch]
+  );
+
+  const canProceed = useMemo(() => [...(store?.queue?.values() ?? [])].every(t => !!t.tracklist), [store]);
 
   return (
-    <Stack direction="row" spacing={1} sx={{ height: '100%', p: 1 }}>
+    <Stack direction="row" spacing={1} sx={{ minHeight: '100%', p: 1 }}>
       <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%' }} spacing={1}>
         <Typography variant="h5">Queue</Typography>
-        <List sx={{ width: '100%' }}>
+        <DroppableList sx={{ width: '100%' }} onDragEnd={onDragEnd}>
           {[...(store?.queue?.values() ?? [])].map((t, i) => (
-            <ListTrack
+            <DraggableItem
+              Component={ListTrack}
               key={t.id}
+              id={t.id}
+              index={i}
               track={t}
               selected={id === t.id}
               onDelete={() => dispatch({ type: 'DELETE_TRACK_FROM_QUEUE', id: t.id })}
               onClick={() => navigate(`/queue/${t.id}`)}
             />
           ))}
-        </List>
+        </DroppableList>
         <Stack justifyContent="center" alignItems="center" spacing={2} sx={{ width: 'fit-content' }}>
           <FileInput onFiles={onFiles} />
           <RssButton />

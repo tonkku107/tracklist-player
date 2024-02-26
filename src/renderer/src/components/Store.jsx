@@ -20,6 +20,20 @@ const reducer = (state, action) => {
 
       return { ...state, queue };
     }
+    case 'MOVE_TRACK': {
+      const entries = [...(state.queue?.entries() ?? [])];
+
+      const { source, destination } = action;
+      if (typeof destination !== 'number') return state;
+      if (source === destination) return state;
+
+      const moved = entries.splice(source, 1);
+      entries.splice(destination, 0, ...moved);
+
+      const queue = new Map(entries);
+
+      return { ...state, queue };
+    }
     case 'SAVE_TRACKLIST': {
       const queue = state.queue ?? new Map();
       if (!state.queue.has(action.id)) return state;
