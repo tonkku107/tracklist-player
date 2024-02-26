@@ -10,10 +10,10 @@ import { processFile } from '../utils/processMetadata';
 export function Component() {
   const [store, dispatch] = useStore();
   const navigate = useNavigate();
-  const { index } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    if (!store.queue || store.queue.length === 0) navigate('/');
+    if (!store.queue || store.queue.size === 0) navigate('/');
   }, [store.queue, navigate]);
 
   const onFiles = async files => {
@@ -23,20 +23,20 @@ export function Component() {
     }
   };
 
-  const canProceed = store?.queue?.every?.(t => !!t.tracklist);
+  const canProceed = [...(store?.queue?.values() ?? [])].every(t => !!t.tracklist);
 
   return (
     <Stack direction="row" spacing={1} sx={{ height: '100%', p: 1 }}>
       <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%' }} spacing={1}>
         <Typography variant="h5">Queue</Typography>
         <List sx={{ width: '100%' }}>
-          {store.queue?.map((t, i) => (
+          {[...(store?.queue?.values() ?? [])].map((t, i) => (
             <ListTrack
-              key={t.filename}
+              key={t.id}
               track={t}
-              selected={index == i}
-              onDelete={() => dispatch({ type: 'DELETE_TRACK_FROM_QUEUE', track: t })}
-              onClick={() => navigate(`/queue/${i}`)}
+              selected={id === t.id}
+              onDelete={() => dispatch({ type: 'DELETE_TRACK_FROM_QUEUE', id: t.id })}
+              onClick={() => navigate(`/queue/${t.id}`)}
             />
           ))}
         </List>
@@ -59,7 +59,7 @@ export function Component() {
         </Stack>
       </Stack>
       <Divider orientation="vertical" flexItem />
-      <Outlet key={index} />
+      <Outlet key={id} />
     </Stack>
   );
 }

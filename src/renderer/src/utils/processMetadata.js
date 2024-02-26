@@ -1,4 +1,5 @@
 import * as musicMetadata from 'music-metadata-browser';
+import { v4 as uuidv4 } from 'uuid';
 import parseAds from './parseAds';
 import parseTracklist from './parseTracklist';
 
@@ -7,6 +8,7 @@ export const processFile = async file => {
   const track = {
     _file: file,
     _metadata: metadata,
+    id: uuidv4(),
     filename: file.name,
     artist: metadata.common.artist,
     title: metadata.common.title,
@@ -27,7 +29,8 @@ export const processFile = async file => {
 
 export const processRss = item => ({
   _rss: item,
-  filename: item.guid,
+  id: item.guid,
+  filename: `${item.guid}.mp3`,
   artist: item.itunes.author,
   title: item.title,
   pictureUrl: item.itunes.image,

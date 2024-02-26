@@ -20,10 +20,10 @@ export default function useAudio() {
   }));
   const audioRef = useRef(null);
 
-  const track = store.queue?.[state.queueIndex] ?? {};
+  const track = [...(store.queue?.values() ?? [])][state.queueIndex];
 
   useEffect(() => {
-    if (!store.queue?.[state.queueIndex]) return;
+    if (!track) return;
 
     setState(s => ({ ...s, ...reset }));
     audioRef.current = new Audio();
@@ -130,7 +130,7 @@ export default function useAudio() {
   }, []);
 
   const canPrevious = state.queueIndex > 0;
-  const canSkip = state.queueIndex < store.queue?.length - 1;
+  const canSkip = state.queueIndex < store.queue?.size - 1;
 
   const skip = useCallback(() => {
     setState(s => {

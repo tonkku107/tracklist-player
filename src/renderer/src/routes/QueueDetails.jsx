@@ -7,8 +7,8 @@ import parseTracklist from '../utils/parseTracklist';
 
 export function Component() {
   const [store, dispatch] = useStore();
-  const { index } = useParams();
-  const track = store?.queue?.[index];
+  const { id } = useParams();
+  const track = store?.queue?.get(id);
 
   const [editing, setEditing] = useState(!track?.tracklist);
   const [input, setInput] = useState(track?.rawTracklist);
@@ -22,10 +22,10 @@ export function Component() {
 
   const save = useCallback(() => {
     const tracklist = parseTracklist(input);
-    dispatch({ type: 'SAVE_TRACKLIST', index, tracklist, raw: input });
+    dispatch({ type: 'SAVE_TRACKLIST', id, tracklist, raw: input });
     setEditing(false);
     setHidden(false);
-  }, [dispatch, index, input]);
+  }, [dispatch, id, input]);
 
   const cancel = useCallback(() => {
     setEditing(false);

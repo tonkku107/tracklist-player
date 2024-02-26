@@ -30,7 +30,7 @@ const router = createHashRouter([
         lazy: () => import('./routes/Queue.jsx'),
         children: [
           {
-            path: ':index',
+            path: ':id',
             lazy: () => import('./routes/QueueDetails.jsx'),
           },
         ],
