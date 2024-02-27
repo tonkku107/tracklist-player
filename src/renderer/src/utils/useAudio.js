@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useStore from '../components/Store';
 
 const reset = { currentTime: 0, duration: 0, currentlyPlaying: undefined };
@@ -20,7 +20,7 @@ export default function useAudio() {
   }));
   const audioRef = useRef(null);
 
-  const track = [...(store.queue?.values() ?? [])][state.queueIndex];
+  const track = useMemo(() => [...(store.queue?.values() ?? [])][state.queueIndex], [state.queueIndex, store.queue]);
 
   useEffect(() => {
     if (!track) return;

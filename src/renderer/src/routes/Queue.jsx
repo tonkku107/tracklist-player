@@ -36,14 +36,15 @@ export function Component() {
     [dispatch]
   );
 
-  const canProceed = useMemo(() => [...(store?.queue?.values() ?? [])].every(t => !!t.tracklist), [store]);
+  const queueValues = useMemo(() => [...(store?.queue?.values() ?? [])], [store]);
+  const canProceed = useMemo(() => queueValues.every(t => !!t.tracklist), [queueValues]);
 
   return (
     <Stack direction="row" spacing={1} sx={{ minHeight: '100%', p: 1 }}>
       <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%' }} spacing={1}>
         <Typography variant="h5">Queue</Typography>
         <DroppableList sx={{ width: '100%' }} onDragEnd={onDragEnd}>
-          {[...(store?.queue?.values() ?? [])].map((t, i) => (
+          {queueValues.map((t, i) => (
             <DraggableItem
               Component={ListTrack}
               key={t.id}
