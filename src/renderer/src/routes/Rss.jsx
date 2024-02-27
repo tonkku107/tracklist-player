@@ -64,7 +64,7 @@ export function Component() {
                           key={item.guid}
                           track={track}
                           style={style}
-                          exists={store.queue?.find(t => t.filename === track.filename)}
+                          exists={store.queue?.has(item.guid)}
                           onAdd={addTrack.bind(null, track)}
                         />
                       );
@@ -81,9 +81,9 @@ export function Component() {
 
       <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ p: 1 }}>
         <Typography>
-          {store.queue?.length ?? 0} {store.queue?.length === 1 ? 'item' : 'items'} in queue
+          {store.queue?.size ?? 0} {store.queue?.size === 1 ? 'item' : 'items'} in queue
         </Typography>
-        <Button variant="contained" disabled={!store.queue?.length} to="/queue" LinkComponent={Link}>
+        <Button variant="contained" disabled={!store.queue?.size} to="/queue" LinkComponent={Link}>
           Show queue
         </Button>
       </Stack>

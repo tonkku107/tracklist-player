@@ -72,7 +72,7 @@ export function Component() {
           <IconButton size="large" onClick={() => navigate('/queue')}>
             <QueueMusicIcon fontSize="inherit" />
           </IconButton>
-          {track._debug && <DebugInfoDialog data={track._debug} />}
+          {track?._debug && <DebugInfoDialog data={track._debug} />}
         </Stack>
 
         <Stack direction="row" justifyContent="center" spacing={2} sx={{ mx: 6 }}>

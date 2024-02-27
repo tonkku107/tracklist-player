@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useStore from '../components/Store';
 
 const reset = { currentTime: 0, duration: 0, currentlyPlaying: undefined };
@@ -20,10 +20,10 @@ export default function useAudio() {
   }));
   const audioRef = useRef(null);
 
-  const track = store.queue?.[state.queueIndex] ?? {};
+  const track = useMemo(() => [...(store.queue?.values() ?? [])][state.queueIndex], [state.queueIndex, store.queue]);
 
   useEffect(() => {
-    if (!store.queue?.[state.queueIndex]) return;
+    if (!track) return;
 
     setState(s => ({ ...s, ...reset }));
     audioRef.current = new Audio();
@@ -130,7 +130,7 @@ export default function useAudio() {
   }, []);
 
   const canPrevious = state.queueIndex > 0;
-  const canSkip = state.queueIndex < store.queue?.length - 1;
+  const canSkip = state.queueIndex < store.queue?.size - 1;
 
   const skip = useCallback(() => {
     setState(s => {
