@@ -52,7 +52,7 @@
     "react-window": "^1.8.10",
     "rss-parser": "^3.13.0",
     "uuid": "^9.0.1",
-    "vite": "^5.1.4",
+    "vite": "^5.1.7",
     "vite-plugin-node-polyfills": "^0.21.0"
   }
 }
