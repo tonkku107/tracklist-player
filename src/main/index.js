@@ -72,22 +72,16 @@ function createWindow() {
   );
 }
 
-ipcMain.handle('theme:toggle', () => {
-  if (nativeTheme.shouldUseDarkColors) {
-    nativeTheme.themeSource = 'light';
-    store.set('theme', 'light');
-  } else {
-    nativeTheme.themeSource = 'dark';
-    store.set('theme', 'dark');
-  }
+ipcMain.handle('theme:get', () => nativeTheme.themeSource);
+ipcMain.handle('theme:set', (e, theme) => {
+  if (!['system', 'light', 'dark'].includes(theme)) return;
 
-  return nativeTheme.shouldUseDarkColors;
-});
+  nativeTheme.themeSource = theme;
+  store.set('theme', theme);
 
-ipcMain.handle('theme:system', () => {
-  nativeTheme.themeSource = 'system';
-  store.delete('theme');
-  return nativeTheme.shouldUseDarkColors;
+  if (theme === 'system') store.delete('theme');
+
+  return;
 });
 
 app.whenReady().then(() => {

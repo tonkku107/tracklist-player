@@ -1,7 +1,8 @@
-import { ThemeProvider, useTheme } from '@emotion/react';
+import { ThemeProvider } from '@emotion/react';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { CssBaseline, IconButton, Tooltip, useMediaQuery } from '@mui/material';
+import BrightnessAutoIcon from '@mui/icons-material/BrightnessAuto';
+import { CssBaseline, ToggleButton, ToggleButtonGroup, useMediaQuery } from '@mui/material';
 import { alpha, createTheme, getContrastRatio, responsiveFontSizes } from '@mui/material/styles';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import '../font.css';
@@ -49,64 +50,62 @@ const getTheme = mode => {
   return theme;
 };
 
-const ThemeModeContext = createContext({ toggleMode: () => {} });
+const ThemeModeContext = createContext({ mode: 'system', setMode: () => {} });
 
 export const ThemeToggle = () => {
-  const theme = useTheme();
   const themeMode = useContext(ThemeModeContext);
 
-  const tooltipText = `Switch to ${
-    theme.palette.mode === 'dark' ? 'light' : 'dark'
-  } theme. Right click to follow system theme.`;
-
   return (
-    <>
-      <Tooltip title={tooltipText}>
-        <span>
-          <IconButton
-            onClick={themeMode.toggleMode}
-            onContextMenu={themeMode.system}
-            color="primary"
-            aria-label="Theme toggle"
-          >
-            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </span>
-      </Tooltip>
-    </>
+    <ToggleButtonGroup
+      color="primary"
+      value={themeMode.mode}
+      exclusive
+      onChange={(e, newMode) => themeMode.setMode(newMode)}
+      aria-label="Theme toggle"
+    >
+      <ToggleButton value="system">
+        <BrightnessAutoIcon fontSize="small" sx={{ mr: 1 }} />
+        System
+      </ToggleButton>
+      <ToggleButton value="light">
+        <Brightness7Icon fontSize="small" sx={{ mr: 1 }} />
+        Light
+      </ToggleButton>
+      <ToggleButton value="dark">
+        <Brightness4Icon fontSize="small" sx={{ mr: 1 }} />
+        Dark
+      </ToggleButton>
+    </ToggleButtonGroup>
   );
 };
 
 export default function Theme({ children }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [mode, setMode] = useState(prefersDarkMode ? 'dark' : 'light');
+  const [mode, setMode] = useState('system');
 
   useEffect(() => {
-    setMode(prefersDarkMode ? 'dark' : 'light');
-  }, [prefersDarkMode]);
+    if (window.api?.theme) {
+      window.api.theme.getTheme().then(setMode);
+    }
+  }, []);
 
   const themeMode = useMemo(
     () => ({
-      toggleMode: async () => {
+      mode,
+      setMode: async theme => {
         if (window.api?.theme) {
-          const shouldUseDarkColors = await window.api.theme.toggle();
-          setMode(shouldUseDarkColors ? 'dark' : 'light');
-        } else {
-          setMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'));
+          await window.api.theme.setTheme(theme);
         }
-      },
-      system: async () => {
-        if (window.api?.theme) {
-          const shouldUseDarkColors = await window.api.theme.system();
-          setMode(shouldUseDarkColors ? 'dark' : 'light');
-        } else {
-          setMode(prefersDarkMode ? 'dark' : 'light');
-        }
+        setMode(theme);
       },
     }),
-    [prefersDarkMode]
+    [mode]
   );
-  const theme = useMemo(() => getTheme(mode), [mode]);
+
+  const theme = useMemo(
+    () => getTheme(mode === 'system' ? (prefersDarkMode ? 'dark' : 'light') : mode),
+    [mode, prefersDarkMode]
+  );
 
   return (
     <ThemeModeContext.Provider value={themeMode}>

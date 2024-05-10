@@ -3,8 +3,8 @@ import { Box, Link, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import FileInput from '../components/FileInput';
 import RssButton from '../components/RssButton';
+import Settings from '../components/Settings';
 import useStore from '../components/Store';
-import { ThemeToggle } from '../components/Theme';
 import { processFile } from '../utils/processMetadata';
 
 export function Component() {
@@ -22,7 +22,7 @@ export function Component() {
   return (
     <Stack justifyContent="center" alignItems="center" sx={{ height: '100%', position: 'relative' }}>
       <Box sx={{ position: 'absolute', right: '24px', top: '24px' }}>
-        <ThemeToggle />
+        <Settings />
       </Box>
 
       <Stack justifyContent="center" alignItems="center" spacing={2} sx={{ width: 'fit-content' }}>
