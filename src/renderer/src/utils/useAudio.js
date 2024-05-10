@@ -15,7 +15,7 @@ export default function useAudio() {
     queueIndex: 0,
     paused: true,
     muted: false,
-    autoplay: false,
+    autoplay: store?.settings.autoplay ?? false,
     ...reset,
   }));
   const audioRef = useRef(null);
@@ -53,7 +53,7 @@ export default function useAudio() {
     const onDurationChange = () => setState(s => ({ ...s, duration: audioRef.current.duration }));
     audioRef.current.addEventListener('durationchange', onDurationChange);
 
-    const onEnded = () => skip();
+    const onEnded = () => (store?.settings.autoplayNext ?? true) && skip();
     audioRef.current.addEventListener('ended', onEnded);
 
     const onCanPlayThrough = () => {
