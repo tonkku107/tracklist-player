@@ -13,6 +13,11 @@ if (store.has('theme')) {
   nativeTheme.themeSource = store.get('theme');
 }
 
+let forcedPrerelease = !!autoUpdater.currentVersion.prerelease?.length;
+if (!forcedPrerelease && store.has('allowPrerelease')) {
+  autoUpdater.allowPrerelease = store.get('allowPrerelease');
+}
+
 let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -99,24 +104,39 @@ app.whenReady().then(() => {
 });
 
 autoUpdater.on('update-available', info => {
-  mainWindow?.webContents.send('update-available', info);
+  mainWindow?.webContents.send('updates:update-available', info);
 });
 
 autoUpdater.on('download-progress', progress => {
-  mainWindow?.webContents.send('download-progress', progress);
+  mainWindow?.webContents.send('updates:download-progress', progress);
 });
 
 autoUpdater.on('update-downloaded', () => {
-  mainWindow?.webContents.send('update-downloaded');
+  mainWindow?.webContents.send('updates:update-downloaded');
 });
 
 autoUpdater.on('error', error => {
   console.error(error);
-  mainWindow?.webContents.send('update-error');
+  mainWindow?.webContents.send('updates:update-error');
 });
 
-ipcMain.on('download-update', () => {
+ipcMain.on('updates:download-update', () => {
   autoUpdater.downloadUpdate();
+});
+
+ipcMain.handle('updates:check-for-updates', async () => {
+  const result = await autoUpdater.checkForUpdates();
+  return !!result;
+});
+
+ipcMain.handle('updates:get-allow-prerelease', () => {
+  return { allowPrerelease: autoUpdater.allowPrerelease, forcedPrerelease };
+});
+
+ipcMain.handle('updates:set-allow-prerelease', (_, value) => {
+  autoUpdater.allowPrerelease = forcedPrerelease || value;
+  store.set('allowPrerelease', value);
+  return { allowPrerelease: autoUpdater.allowPrerelease, forcedPrerelease };
 });
 
 app.on('window-all-closed', () => {

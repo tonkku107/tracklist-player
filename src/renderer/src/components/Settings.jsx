@@ -1,6 +1,8 @@
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {
+  Box,
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -12,13 +14,25 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useStore from './Store';
 import { ThemeToggle } from './Theme';
 
 export default function Settings() {
   const [store, dispatch] = useStore();
   const [open, setOpen] = useState(false);
+  const [updateCheckStatus, setUpdateCheckStatus] = useState('');
+  const [betaState, setBetaState] = useState({ allowPrerelease: false, forcedPrerelease: false });
+
+  const checkForUpdates = useCallback(async () => {
+    setUpdateCheckStatus('Checking for updates...');
+    const hasUpdate = await window.api.updates.checkForUpdates();
+    setUpdateCheckStatus(hasUpdate ? 'There is a new update!' : 'You are already up to date');
+  }, []);
+
+  useEffect(() => {
+    window.api?.updates.getAllowPrerelease().then(setBetaState);
+  }, []);
 
   return (
     <>
@@ -94,6 +108,32 @@ export default function Settings() {
                 />
               </FormGroup>
             </Stack>
+
+            {window?.api && (
+              <Stack spacing={1}>
+                <Typography variant="h5">Updates</Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={betaState.allowPrerelease}
+                        onChange={(_, value) => window.api.updates.setAllowPrerelease(value).then(setBetaState)}
+                        disabled={betaState.forcedPrerelease}
+                      />
+                    }
+                    label="Opt-in to beta updates"
+                  />
+                </FormGroup>
+                <Box>
+                  <Button variant="contained" onClick={checkForUpdates}>
+                    Check for updates
+                  </Button>
+                </Box>
+                <Typography variant="caption" color="text.secondary">
+                  {updateCheckStatus}
+                </Typography>
+              </Stack>
+            )}
           </Stack>
         </DialogContent>
       </Dialog>

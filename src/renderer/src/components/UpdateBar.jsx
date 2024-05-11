@@ -19,33 +19,33 @@ export default function UpdateBar() {
     const onUpdateAvailable = (_, info) => {
       setState(s => ({ ...s, status: 0, open: true, info }));
     };
-    ipcRenderer.on('update-available', onUpdateAvailable);
+    ipcRenderer.on('updates:update-available', onUpdateAvailable);
 
     const onDownloadProgress = (_, progress) => {
       setState(s => ({ ...s, status: 1, progress }));
     };
-    ipcRenderer.on('download-progress', onDownloadProgress);
+    ipcRenderer.on('updates:download-progress', onDownloadProgress);
 
     const onDownloaded = () => {
       setState(s => ({ ...s, status: 2 }));
     };
-    ipcRenderer.on('update-downloaded', onDownloaded);
+    ipcRenderer.on('updates:update-downloaded', onDownloaded);
 
     const onError = () => {
       setState(s => ({ ...s, status: 3 }));
     };
-    ipcRenderer.on('update-error', onError);
+    ipcRenderer.on('updates:update-error', onError);
 
     return () => {
-      ipcRenderer.removeListener('update-available', onUpdateAvailable);
-      ipcRenderer.removeListener('download-progress', onDownloadProgress);
-      ipcRenderer.removeListener('update-downloaded', onDownloaded);
-      ipcRenderer.removeListener('update-error', onError);
+      ipcRenderer.removeListener('updates:update-available', onUpdateAvailable);
+      ipcRenderer.removeListener('updates:download-progress', onDownloadProgress);
+      ipcRenderer.removeListener('updates:update-downloaded', onDownloaded);
+      ipcRenderer.removeListener('updates:update-error', onError);
     };
   }, []);
 
   const update = useCallback(() => {
-    window.api.downloadUpdate();
+    window.api.updates.downloadUpdate();
     setState(s => ({ ...s, status: 1 }));
   }, []);
 
