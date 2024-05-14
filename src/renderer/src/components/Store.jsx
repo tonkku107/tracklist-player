@@ -48,13 +48,60 @@ const reducer = (state, action) => {
 
       return { ...state };
     }
+    case 'SET_USE_FONT': {
+      const settings = {
+        ...state.settings,
+        useFont: action.value,
+      };
+      saveSettings(settings);
+
+      return { ...state, settings };
+    }
+    case 'SET_USE_CAPS': {
+      const settings = {
+        ...state.settings,
+        useCaps: action.value,
+      };
+      saveSettings(settings);
+
+      return { ...state, settings };
+    }
+    case 'SET_AUTOPLAY': {
+      const settings = {
+        ...state.settings,
+        autoplay: action.value,
+      };
+      saveSettings(settings);
+
+      return { ...state, settings };
+    }
+    case 'SET_AUTOPLAY_NEXT': {
+      const settings = {
+        ...state.settings,
+        autoplayNext: action.value,
+      };
+      saveSettings(settings);
+
+      return { ...state, settings };
+    }
     default:
       return state;
   }
 };
 
+const saveSettings = settings => {
+  localStorage.setItem('settings', JSON.stringify(settings));
+};
+
 export function Store({ children }) {
-  const [state, dispatch] = useReducer(reducer, {});
+  const [state, dispatch] = useReducer(reducer, { settings: {} }, state => {
+    const savedSettings = localStorage.getItem('settings');
+    if (savedSettings) {
+      state.settings = JSON.parse(savedSettings);
+    }
+
+    return state;
+  });
 
   return <StoreContext.Provider value={[state, dispatch]}>{children}</StoreContext.Provider>;
 }

@@ -3,10 +3,15 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 const api = {
   theme: {
-    toggle: () => ipcRenderer.invoke('theme:toggle'),
-    system: () => ipcRenderer.invoke('theme:system'),
+    getTheme: () => ipcRenderer.invoke('theme:get'),
+    setTheme: theme => ipcRenderer.invoke('theme:set', theme),
   },
-  downloadUpdate: () => ipcRenderer.send('download-update'),
+  updates: {
+    checkForUpdates: () => ipcRenderer.invoke('updates:check-for-updates'),
+    downloadUpdate: () => ipcRenderer.send('updates:download-update'),
+    getAllowPrerelease: () => ipcRenderer.invoke('updates:get-allow-prerelease'),
+    setAllowPrerelease: value => ipcRenderer.invoke('updates:set-allow-prerelease', value),
+  },
 };
 
 if (process.contextIsolated) {

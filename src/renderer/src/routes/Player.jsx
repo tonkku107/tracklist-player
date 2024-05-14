@@ -8,12 +8,15 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Box, Fab, IconButton, Slider, Stack, Typography } from '@mui/material';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DebugInfoDialog from '../components/DebugInfoDialog';
+import useStore from '../components/Store';
 import { stringTimestamp } from '../utils/timestamp';
 import useAudio from '../utils/useAudio';
-import DebugInfoDialog from '../components/DebugInfoDialog';
 
 export function Component() {
+  const [store] = useStore();
   const navigate = useNavigate();
   const {
     track,
@@ -39,9 +42,18 @@ export function Component() {
   const fileTitleText = track?.title ?? track?.filename ?? '';
   const titleText = currentlyPlaying?.title ?? fileTitleText;
 
+  const bodyVariant = store.settings.useFont === false ? 'body1' : 'mcat_body1';
+  const h3Variant = store.settings.useFont === false ? 'h3' : 'mcat_h3';
+  const h4Variant = store.settings.useFont === false ? 'h4' : 'mcat_h4';
+
+  const transformText = useCallback(
+    text => (store.settings.useCaps === false ? text : text.toUpperCase()),
+    [store.settings.useCaps]
+  );
+
   return (
     <Stack sx={{ height: '100%', p: 2 }} spacing={2}>
-      <Typography variant="mcat_body1">{currentlyPlaying && fileTitleText.toUpperCase()}</Typography>
+      <Typography variant={bodyVariant}>{currentlyPlaying && transformText(fileTitleText)}</Typography>
 
       <Stack justifyContent="end" sx={{ flexGrow: 1 }}>
         {/* <img> was being annoying so this is the workaround :) */}
@@ -57,8 +69,8 @@ export function Component() {
             />
           </Stack>
         )}
-        <Typography variant="mcat_h3">{artistText.toUpperCase()}</Typography>
-        <Typography variant="mcat_h4">{titleText.toUpperCase()}</Typography>
+        <Typography variant={h3Variant}>{transformText(artistText)}</Typography>
+        <Typography variant={h4Variant}>{transformText(titleText)}</Typography>
       </Stack>
 
       <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
