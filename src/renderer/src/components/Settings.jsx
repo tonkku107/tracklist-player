@@ -26,8 +26,28 @@ export default function Settings() {
 
   const checkForUpdates = useCallback(async () => {
     setUpdateCheckStatus('Checking for updates...');
-    const hasUpdate = await window.api.updates.checkForUpdates();
-    setUpdateCheckStatus(hasUpdate ? 'There is a new update!' : 'You are already up to date');
+    const result = await window.api.updates.checkForUpdates();
+    if (!result) setUpdateCheckStatus("Couldn't check for updates");
+  }, []);
+
+  useEffect(() => {
+    const ipcRenderer = window.electron?.ipcRenderer;
+    if (!ipcRenderer) return;
+
+    const onUpdateAvailable = () => {
+      setUpdateCheckStatus('There is a new update!');
+    };
+    ipcRenderer.on('updates:update-available', onUpdateAvailable);
+
+    const onUpdateNotAvailable = () => {
+      setUpdateCheckStatus('You are already up to date');
+    };
+    ipcRenderer.on('updates:update-not-available', onUpdateNotAvailable);
+
+    return () => {
+      ipcRenderer.removeListener('updates:update-available', onUpdateAvailable);
+      ipcRenderer.removeListener('updates:update-not-available', onUpdateNotAvailable);
+    };
   }, []);
 
   useEffect(() => {

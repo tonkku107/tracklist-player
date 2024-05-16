@@ -107,6 +107,10 @@ autoUpdater.on('update-available', info => {
   mainWindow?.webContents.send('updates:update-available', info);
 });
 
+autoUpdater.on('update-not-available', info => {
+  mainWindow?.webContents.send('updates:update-not-available', info);
+});
+
 autoUpdater.on('download-progress', progress => {
   mainWindow?.webContents.send('updates:download-progress', progress);
 });
