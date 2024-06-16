@@ -2,10 +2,11 @@
 import { is, optimizer } from '@electron-toolkit/utils';
 import { BrowserWindow, Menu, app, ipcMain, nativeTheme, shell } from 'electron';
 import Store from 'electron-store';
-import { autoUpdater } from 'electron-updater';
+import electronUpdater from 'electron-updater';
 import { join } from 'path';
 import icon from '../../resources/icon.png?asset';
 
+const autoUpdater = electronUpdater.autoUpdater;
 autoUpdater.autoDownload = false;
 
 const store = new Store();
@@ -27,7 +28,7 @@ function createWindow() {
     ...(process.platform === 'linux' ? { icon } : {}),
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#121212' : '#fff',
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false,
       backgroundThrottling: false,
     },
