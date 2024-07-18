@@ -31,7 +31,7 @@ export default async function parseAds(track) {
     // Blocking the ads would've been so much simpler fr...
     const adRes = await fetch(res.url, { headers: { range: `bytes=0-${startOfContent}` } });
     const preRollAds = await adRes.blob();
-    const tracklistOffset = await getDuration(preRollAds);
+    const tracklistOffset = await getDuration(preRollAds).catch(() => 0);
     track.tracklistOffset = tracklistOffset;
     track._debug.tracklistOffset = tracklistOffset;
   }
