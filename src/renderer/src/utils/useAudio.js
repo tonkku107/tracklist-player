@@ -22,6 +22,9 @@ export default function useAudio() {
 
   const track = useMemo(() => [...(store.queue?.values() ?? [])][state.queueIndex], [state.queueIndex, store.queue]);
 
+  const canPrevious = state.queueIndex > 0;
+  const canSkip = state.queueIndex < store.queue?.size - 1;
+
   useEffect(() => {
     if (!track) return;
 
@@ -70,7 +73,6 @@ export default function useAudio() {
       switch (e.key) {
         case ' ':
         case 'k':
-        case 'MediaPlayPause':
           return togglePlay();
         case 'm':
           return toggleMute();
@@ -84,13 +86,14 @@ export default function useAudio() {
         case 'ArrowRight':
         case 'l':
           return forward();
-        case 'MediaTrackNext':
-          return skip();
-        case 'MediaTrackPrevious':
-          return previous();
       }
     };
     document.addEventListener('keyup', onKeyup);
+
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('previoustrack', canPrevious ? () => previous() : null);
+      navigator.mediaSession.setActionHandler('nexttrack', canSkip ? () => skip() : null);
+    }
 
     return () => {
       audioRef.current.removeEventListener('play', onPlay);
@@ -105,6 +108,17 @@ export default function useAudio() {
       audioRef.current = null;
     };
   }, [state.queueIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: state.currentlyPlaying?.title ?? track?.title ?? track?.filename,
+        artist: state.currentlyPlaying?.artist ?? track?.artist,
+        album: state.currentlyPlaying && (track?.title ?? track?.filename),
+        artwork: track?.pictureUrl ? [{ src: track?.pictureUrl }] : [],
+      })
+    }
+  }, [track, state.currentlyPlaying]);
 
   const togglePlay = useCallback(() => {
     if (audioRef.current.paused) {
@@ -128,9 +142,6 @@ export default function useAudio() {
     setState(s => ({ ...s, currentTime: value }));
     audioRef.current.currentTime = value;
   }, []);
-
-  const canPrevious = state.queueIndex > 0;
-  const canSkip = state.queueIndex < store.queue?.size - 1;
 
   const skip = useCallback(() => {
     setState(s => {
