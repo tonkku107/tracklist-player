@@ -1,10 +1,10 @@
-import * as musicMetadata from 'music-metadata-browser';
+import { parseBlob } from 'music-metadata';
 import { v4 as uuidv4 } from 'uuid';
 import parseAds from './parseAds';
 import parseTracklist from './parseTracklist';
 
 export const processFile = async file => {
-  const metadata = await musicMetadata.parseBlob(file);
+  const metadata = await parseBlob(file);
   const track = {
     _file: file,
     _metadata: metadata,

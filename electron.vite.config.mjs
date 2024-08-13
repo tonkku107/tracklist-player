@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react';
 import { execSync } from 'child_process';
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
 import { resolve } from 'path';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 let commit;
 try {
@@ -38,7 +37,7 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src'),
       },
     },
-    plugins: [react(), nodePolyfills({ globals: { buffer: true } })],
+    plugins: [react()],
     define,
     build: {
       minify: true,
