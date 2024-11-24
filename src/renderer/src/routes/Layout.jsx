@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import UpdateBar from '../components/UpdateBar';
 
 export default function Layout() {

@@ -1,6 +1,6 @@
 import { Button, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { Suspense, memo, useCallback } from 'react';
-import { Await, Link, defer, useLoaderData, useParams } from 'react-router-dom';
+import { Await, Link, useLoaderData, useParams } from 'react-router';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList, areEqual } from 'react-window';
 import Parser from 'rss-parser';
@@ -19,7 +19,7 @@ export async function loader({ params }) {
   if (!rssUrl) throw new Response('Invalid RSS feed', { status: 404 });
   const parser = new Parser();
 
-  return defer({ feed: parser.parseURL(rssUrl) });
+  return { feed: parser.parseURL(rssUrl) };
 }
 
 export function Component() {

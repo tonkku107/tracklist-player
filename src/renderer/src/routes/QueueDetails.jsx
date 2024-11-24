@@ -1,6 +1,6 @@
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import useStore from '../components/Store';
 import TracklistTable from '../components/TracklistTable';
 import parseTracklist from '../utils/parseTracklist';
