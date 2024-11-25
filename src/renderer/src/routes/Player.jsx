@@ -9,7 +9,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Box, Fab, IconButton, Slider, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import DebugInfoDialog from '../components/DebugInfoDialog';
 import useStore from '../components/Store';
 import { stringTimestamp } from '../utils/timestamp';

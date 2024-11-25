@@ -1,6 +1,6 @@
 /* global __VERSION__, __REPO__, __COMMIT__ */
 import { Box, Link, Stack } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import FileInput from '../components/FileInput';
 import RssButton from '../components/RssButton';
 import Settings from '../components/Settings';

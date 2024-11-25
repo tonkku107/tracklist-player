@@ -1,6 +1,6 @@
 import { Button, Divider, Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router';
 import DraggableItem from '../components/DraggableItem';
 import DroppableList from '../components/DroppableList';
 import FileInput from '../components/FileInput';

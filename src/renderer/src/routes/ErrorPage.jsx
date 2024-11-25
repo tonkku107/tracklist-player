@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 
 export default function ErrorPage() {
   const routeError = useRouteError();
