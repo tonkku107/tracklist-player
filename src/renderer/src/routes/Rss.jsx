@@ -1,9 +1,11 @@
-import { Button, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { Box, Button, Divider, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { Suspense, memo, useCallback } from 'react';
-import { Await, Link, useLoaderData, useParams } from 'react-router';
+import { Await, Link, redirect, useLoaderData, useParams } from 'react-router';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList, areEqual } from 'react-window';
 import Parser from 'rss-parser';
+import { v4 as uuidv4 } from 'uuid';
 import ListTrack from '../components/ListTrack';
 import Loading from '../components/Loading';
 import useStore from '../components/Store';
@@ -14,12 +16,33 @@ const shows = {
   cotw: 'https://feeds.megaphone.fm/MSC1713576256',
 };
 
-export async function loader({ params }) {
+export async function loader({ params, request }) {
+  const url = new URL(request.url);
+  const refresh = url.searchParams.get('refresh');
+
   const rssUrl = shows[params.show];
   if (!rssUrl) throw new Response('Invalid RSS feed', { status: 404 });
-  const parser = new Parser();
 
-  return { feed: parser.parseURL(rssUrl) };
+  const req = fetch(rssUrl, {
+    cache: refresh ? 'reload' : 'default',
+    signal: request.signal,
+  });
+
+  if (refresh) {
+    url.searchParams.delete('refresh');
+    return redirect(url.toString());
+  }
+
+  const parser = new Parser();
+  const feed = req.then(res => {
+    if (!res.ok) throw res;
+    return res.text()
+  }).then(xml => parser.parseString(xml));
+
+  return {
+    feed,
+    requestId: uuidv4(), // random key for suspense so that loading state can be shown again so that the user knows something is happening
+  };
 }
 
 export function Component() {
@@ -37,13 +60,19 @@ export function Component() {
 
   return (
     <Stack sx={{ height: '100%', width: '100%' }}>
-      <Tabs value={show} centered sx={{ mb: 1 }}>
-        <Tab label="Monstercat Silk Showcase" value="mss" to="/rss/mss" component={Link} />
-        <Tab label="Monstercat Call of the Wild" value="cotw" to="/rss/cotw" component={Link} />
-      </Tabs>
+      <Stack>
+        <Tabs value={show} centered sx={{ mb: 1 }}>
+          <Tab label="Monstercat Silk Showcase" value="mss" to="/rss/mss" component={Link} />
+          <Tab label="Monstercat Call of the Wild" value="cotw" to="/rss/cotw" component={Link} />
+        </Tabs>
+
+        <Box sx={{ position: 'absolute', right: '8px', top: '8px' }}>
+          <IconButton component={Link} to={{ search: '?refresh=true' }}><RefreshIcon /></IconButton>
+        </Box>
+      </Stack>
 
       <Stack sx={{ height: '100%' }}>
-        <Suspense fallback={<Loading />}>
+        <Suspense key={data.requestId} fallback={<Loading />}>
           <Await resolve={data.feed} errorElement={<p>Failed to load the feed!</p>}>
             {feed => (
               <AutoSizer>
