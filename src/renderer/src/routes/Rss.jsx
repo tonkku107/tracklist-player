@@ -112,8 +112,8 @@ export function Component() {
         <Typography>
           {store.queue?.size ?? 0} {store.queue?.size === 1 ? 'item' : 'items'} in queue
         </Typography>
-        <Button variant="contained" disabled={!store.queue?.size} to="/queue" LinkComponent={Link}>
-          Show queue
+        <Button variant="contained" to={store.queue?.size ? '/queue' : '/'} LinkComponent={Link}>
+          {store.queue?.size ? 'Show queue' : 'Cancel'}
         </Button>
       </Stack>
     </Stack>
