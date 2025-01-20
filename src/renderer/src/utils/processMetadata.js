@@ -28,10 +28,10 @@ export const processFile = async file => {
 };
 
 export const processRss = item => {
-  const pictureUrl = URL.parse(item.itunes.image);
-  if (pictureUrl?.searchParams.has('max-w') || pictureUrl?.searchParams.has('max-h')) {
-    pictureUrl.searchParams.set('max-w', '128');
-    pictureUrl.searchParams.set('max-h', '128');
+  const thumbnailUrl = URL.parse(item.itunes.image);
+  if (thumbnailUrl?.searchParams.has('max-w') || thumbnailUrl?.searchParams.has('max-h')) {
+    thumbnailUrl.searchParams.set('max-w', '128');
+    thumbnailUrl.searchParams.set('max-h', '128');
   }
 
   return {
@@ -40,7 +40,8 @@ export const processRss = item => {
     filename: `${item.guid}.mp3`,
     artist: item.itunes.author,
     title: item.title,
-    pictureUrl: pictureUrl?.toString(),
+    pictureUrl: item.itunes.image,
+    thumbnailUrl: thumbnailUrl?.toString(),
     audioUrl: item.enclosure.url,
     rawTracklist: item.contentSnippet,
     duration: item.itunes.duration,

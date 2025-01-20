@@ -52,9 +52,9 @@ const ListTrack = forwardRef(function ListTrack(
             <DragIndicatorIcon />
           </IconButton>
         ) : undefined}
-        {track.pictureUrl && (
+        {(track.pictureUrl || track.thumbnailUrl) && (
           <ListItemAvatar>
-            <Avatar variant="square" src={track.pictureUrl} />
+            <Avatar variant="square" src={track.thumbnailUrl ?? track.pictureUrl} />
           </ListItemAvatar>
         )}
         <ListItemText primary={track.title ?? track.filename} secondary={track.artist} />
