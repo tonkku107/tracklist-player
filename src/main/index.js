@@ -66,7 +66,7 @@ function createWindow() {
 
   // Expose some headers that normally aren't accessible with fetch
   mainWindow.webContents.session.webRequest.onHeadersReceived(
-    { urls: ['https://dcs.megaphone.fm/*'] },
+    { urls: ['https://*.megaphone.fm/*'] },
     (details, callback) => {
       callback({
         responseHeaders: {
