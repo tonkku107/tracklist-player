@@ -49,6 +49,10 @@ export default function UpdateBar() {
     setState(s => ({ ...s, status: 1 }));
   }, []);
 
+  const restartAndUpdate = useCallback(() => {
+    window.api.updates.restartAndUpdate();
+  }, []);
+
   return (
     <Collapse in={state.open}>
       <Alert
@@ -61,6 +65,7 @@ export default function UpdateBar() {
               </ActionButton>
             ) : undefined}
             {state.status === 0 ? <ActionButton onClick={update}>Update</ActionButton> : undefined}
+            {state.status === 2 ? <ActionButton onClick={restartAndUpdate}>Restart now</ActionButton> : undefined}
             {state.status !== 1 ? (
               <IconButton
                 color="inherit"

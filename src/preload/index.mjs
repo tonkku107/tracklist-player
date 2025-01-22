@@ -9,6 +9,7 @@ const api = {
   updates: {
     checkForUpdates: () => ipcRenderer.invoke('updates:check-for-updates'),
     downloadUpdate: () => ipcRenderer.send('updates:download-update'),
+    restartAndUpdate: () => ipcRenderer.send('updates:restart-and-update'),
     getAllowPrerelease: () => ipcRenderer.invoke('updates:get-allow-prerelease'),
     setAllowPrerelease: value => ipcRenderer.invoke('updates:set-allow-prerelease', value),
   },
