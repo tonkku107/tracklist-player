@@ -1,19 +1,19 @@
-import { Draggable } from 'react-beautiful-dnd';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
-export default function DraggableItem({ id, index, children, Component, ...rest }) {
+export default function DraggableItem({ id, children, Component, ...rest }) {
+  const { setNodeRef, setActivatorNodeRef, transform, transition, listeners, attributes, isDragging } = useSortable({ id });
+
   return (
-    <Draggable draggableId={id} index={index}>
-      {(provided, snapshot) => (
-        <Component
-          {...rest}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          dragHandleProps={provided.dragHandleProps}
-          snapshot={snapshot}
-        >
-          {children}
-        </Component>
-      )}
-    </Draggable>
+    <Component
+      {...rest}
+      ref={setNodeRef}
+      dragHandleRef={setActivatorNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      dragHandleProps={{ ...listeners, ...attributes }}
+      dragState={{ isDragging }}
+    >
+      {children}
+    </Component>
   );
 }

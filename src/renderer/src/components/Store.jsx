@@ -21,14 +21,17 @@ const reducer = (state, action) => {
       return { ...state, queue };
     }
     case 'MOVE_TRACK': {
+      const { from, to } = action;
+      if (from === to) return state;
+
       const entries = [...(state.queue?.entries() ?? [])];
 
-      const { source, destination } = action;
-      if (typeof destination !== 'number') return state;
-      if (source === destination) return state;
+      const oldIndex = entries.findIndex(e => e[0] === from);
+      const newIndex = entries.findIndex(e => e[0] === to);
+      if (oldIndex === -1 || newIndex === -1) return state;
 
-      const moved = entries.splice(source, 1);
-      entries.splice(destination, 0, ...moved);
+      const moved = entries.splice(oldIndex, 1);
+      entries.splice(newIndex, 0, ...moved);
 
       const queue = new Map(entries);
 

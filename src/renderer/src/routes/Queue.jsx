@@ -30,26 +30,36 @@ export function Component() {
 
   const onDragEnd = useCallback(
     result => {
-      const { source, destination } = result;
-      dispatch({ type: 'MOVE_TRACK', source: source.index, destination: destination?.index });
+      const { active, over } = result;
+      dispatch({ type: 'MOVE_TRACK', from: active.id, to: over.id });
     },
     [dispatch]
   );
 
   const queueValues = useMemo(() => [...(store?.queue?.values() ?? [])], [store]);
+  const queueKeys = useMemo(() => [...(store?.queue?.keys() ?? [])], [store]);
   const canProceed = useMemo(() => queueValues.every(t => !!t.tracklist), [queueValues]);
 
   return (
     <Stack direction="row" spacing={1} sx={{ minHeight: '100%', p: 1 }}>
       <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%' }} spacing={1}>
         <Typography variant="h5">Queue</Typography>
-        <DroppableList sx={{ width: '100%' }} onDragEnd={onDragEnd}>
-          {queueValues.map((t, i) => (
+        <DroppableList sx={{ width: '100%' }} onDragEnd={onDragEnd} ids={queueKeys}
+          renderOverlay={i => (
+            <ListTrack
+              dragState={{ isOverlay: true }}
+              track={store.queue.get(i)}
+              selected={id === i}
+              onDelete={() => {}}
+              onClick={() => {}}
+            />
+          )}
+        >
+          {queueValues.map(t => (
             <DraggableItem
               Component={ListTrack}
               key={t.id}
               id={t.id}
-              index={i}
               track={t}
               selected={id === t.id}
               onDelete={() => dispatch({ type: 'DELETE_TRACK_FROM_QUEUE', id: t.id })}
