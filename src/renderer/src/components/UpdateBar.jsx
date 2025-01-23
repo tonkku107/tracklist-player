@@ -44,7 +44,7 @@ export default function UpdateBar() {
     };
   }, []);
 
-  const update = useCallback(() => {
+  const downloadUpdate = useCallback(() => {
     window.api.updates.downloadUpdate();
     setState(s => ({ ...s, status: 1 }));
   }, []);
@@ -64,7 +64,7 @@ export default function UpdateBar() {
                 What&apos;s new
               </ActionButton>
             ) : undefined}
-            {state.status === 0 ? <ActionButton onClick={update}>Update</ActionButton> : undefined}
+            {state.status === 0 ? <ActionButton onClick={downloadUpdate}>Download</ActionButton> : undefined}
             {state.status === 2 ? <ActionButton onClick={restartAndUpdate}>Restart now</ActionButton> : undefined}
             {state.status !== 1 ? (
               <IconButton
