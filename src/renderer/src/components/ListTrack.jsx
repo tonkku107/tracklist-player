@@ -21,10 +21,12 @@ const ListTrack = forwardRef(function ListTrack(
             }
           : {},
         dragState?.isOverlay
-          ? {
-              backgroundColor: theme => `${theme.palette.background.default}!important`,
-              '&.Mui-selected': { backgroundColor: theme => `${theme.palette.background.default}!important` },
-            }
+          ? theme => ({
+              backgroundColor: theme.palette.background.default,
+              '&.Mui-selected': { backgroundColor: theme.palette.background.default },
+              '&:hover': { backgroundColor: theme.palette.background.default },
+              '&.Mui-selected:hover': { backgroundColor: theme.palette.background.default },
+            })
           : {},
       ]}
       ref={ref}
