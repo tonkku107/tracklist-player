@@ -1,7 +1,7 @@
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Box, Button, Divider, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { Suspense, memo, useCallback } from 'react';
-import { Await, Link, redirect, useLoaderData, useParams } from 'react-router';
+import { Await, Link, useLoaderData, useParams } from 'react-router';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList, areEqual } from 'react-window';
 import Parser from 'rss-parser';
@@ -27,11 +27,6 @@ export async function loader({ params, request }) {
     cache: refresh ? 'reload' : 'default',
     signal: request.signal,
   });
-
-  if (refresh) {
-    url.searchParams.delete('refresh');
-    return redirect(url.toString());
-  }
 
   const parser = new Parser();
   const feed = req
