@@ -44,7 +44,10 @@ export function Component() {
     <Stack direction="row" spacing={1} sx={{ minHeight: '100%', p: 1 }}>
       <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%' }} spacing={1}>
         <Typography variant="h5">Queue</Typography>
-        <DroppableList sx={{ width: '100%' }} onDragEnd={onDragEnd} ids={queueKeys}
+        <DroppableList
+          sx={{ width: '100%' }}
+          onDragEnd={onDragEnd}
+          ids={queueKeys}
           renderOverlay={i => (
             <ListTrack
               dragState={{ isOverlay: true }}

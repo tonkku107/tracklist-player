@@ -21,9 +21,7 @@ export default function DroppableList({ onDragEnd, children, ids, renderOverlay,
         <SortableContext items={ids} strategy={verticalListSortingStrategy}>
           {children}
         </SortableContext>
-        <DragOverlay>
-          {activeId ? renderOverlay(activeId) : null}
-        </DragOverlay>
+        <DragOverlay>{activeId ? renderOverlay(activeId) : null}</DragOverlay>
       </List>
     </DndContext>
   );

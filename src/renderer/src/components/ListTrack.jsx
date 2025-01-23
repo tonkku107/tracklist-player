@@ -17,7 +17,7 @@ const ListTrack = forwardRef(function ListTrack(
       sx={[
         dragState?.isDragging
           ? {
-              visibility: 'hidden'
+              visibility: 'hidden',
             }
           : {},
         dragState?.isOverlay
@@ -25,7 +25,7 @@ const ListTrack = forwardRef(function ListTrack(
               backgroundColor: theme => `${theme.palette.background.default}!important`,
               '&.Mui-selected': { backgroundColor: theme => `${theme.palette.background.default}!important` },
             }
-          : {}
+          : {},
       ]}
       ref={ref}
       onClick={() => (onClick ? onClick() : buttonRef.current?.click())}
