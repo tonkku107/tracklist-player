@@ -34,10 +34,12 @@ export async function loader({ params, request }) {
   }
 
   const parser = new Parser();
-  const feed = req.then(res => {
-    if (!res.ok) throw res;
-    return res.text()
-  }).then(xml => parser.parseString(xml));
+  const feed = req
+    .then(res => {
+      if (!res.ok) throw res;
+      return res.text();
+    })
+    .then(xml => parser.parseString(xml));
 
   return {
     feed,
@@ -67,7 +69,9 @@ export function Component() {
         </Tabs>
 
         <Box sx={{ position: 'absolute', right: '8px', top: '8px' }}>
-          <IconButton component={Link} to={{ search: '?refresh=true' }}><RefreshIcon /></IconButton>
+          <IconButton component={Link} to={{ search: '?refresh=true' }}>
+            <RefreshIcon />
+          </IconButton>
         </Box>
       </Stack>
 

@@ -45,7 +45,7 @@ export const processRss = item => {
     audioUrl: item.enclosure.url,
     rawTracklist: item.contentSnippet,
     duration: item.itunes.duration,
-  }
+  };
 };
 
 export const finalizeRss = async track => {
