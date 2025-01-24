@@ -27,17 +27,26 @@ export const processFile = async file => {
   return track;
 };
 
-export const processRss = item => ({
-  _rss: item,
-  id: item.guid,
-  filename: `${item.guid}.mp3`,
-  artist: item.itunes.author,
-  title: item.title,
-  pictureUrl: item.itunes.image,
-  audioUrl: item.enclosure.url,
-  rawTracklist: item.contentSnippet,
-  duration: item.itunes.duration,
-});
+export const processRss = item => {
+  const thumbnailUrl = URL.parse(item.itunes.image);
+  if (thumbnailUrl?.searchParams.has('max-w') || thumbnailUrl?.searchParams.has('max-h')) {
+    thumbnailUrl.searchParams.set('max-w', '128');
+    thumbnailUrl.searchParams.set('max-h', '128');
+  }
+
+  return {
+    _rss: item,
+    id: item.guid,
+    filename: `${item.guid}.mp3`,
+    artist: item.itunes.author,
+    title: item.title,
+    pictureUrl: item.itunes.image,
+    thumbnailUrl: thumbnailUrl?.toString(),
+    audioUrl: item.enclosure.url,
+    rawTracklist: item.contentSnippet,
+    duration: item.itunes.duration,
+  };
+};
 
 export const finalizeRss = async track => {
   track.tracklist = parseTracklist(track.rawTracklist);
