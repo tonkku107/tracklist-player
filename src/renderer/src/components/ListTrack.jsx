@@ -1,29 +1,35 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { Avatar, IconButton, ListItem, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
 import { forwardRef, useRef } from 'react';
 import AsyncLoadingIconButton from './AsyncLoadingIconButton';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 const ListTrack = forwardRef(function ListTrack(
-  { track, selected, exists, onDelete, onClick, onAdd, dragHandleProps, snapshot, ...rest },
+  { track, exists, onDelete, onClick, onAdd, dragHandleRef, dragHandleProps, dragState, ...rest },
   ref
 ) {
   const buttonRef = useRef(null);
 
   return (
     <ListItemButton
-      sx={
-        snapshot?.isDragging
+      sx={[
+        dragState?.isDragging
           ? {
-              backgroundColor: theme => theme.palette.background.default,
-              '&.Mui-selected': { backgroundColor: theme => theme.palette.background.default },
+              visibility: 'hidden',
             }
-          : {}
-      }
+          : {},
+        dragState?.isOverlay
+          ? theme => ({
+              backgroundColor: theme.palette.background.default,
+              '&.Mui-selected': { backgroundColor: theme.palette.background.default },
+              '&:hover': { backgroundColor: theme.palette.background.default },
+              '&.Mui-selected:hover': { backgroundColor: theme.palette.background.default },
+            })
+          : {},
+      ]}
       ref={ref}
-      selected={selected}
       onClick={() => (onClick ? onClick() : buttonRef.current?.click())}
       {...rest}
     >
@@ -47,8 +53,8 @@ const ListTrack = forwardRef(function ListTrack(
           ) : undefined
         }
       >
-        {dragHandleProps ? (
-          <IconButton sx={{ ml: -4, cursor: 'grab' }} disableRipple {...dragHandleProps}>
+        {dragHandleProps || dragState?.isOverlay ? (
+          <IconButton ref={dragHandleRef} sx={{ ml: -4, cursor: 'grab' }} disableRipple {...dragHandleProps}>
             <DragIndicatorIcon />
           </IconButton>
         ) : undefined}
