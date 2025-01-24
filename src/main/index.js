@@ -129,6 +129,10 @@ ipcMain.on('updates:download-update', () => {
   autoUpdater.downloadUpdate();
 });
 
+ipcMain.on('updates:restart-and-update', () => {
+  autoUpdater.quitAndInstall();
+});
+
 ipcMain.handle('updates:check-for-updates', async () => {
   const result = await autoUpdater.checkForUpdates();
   return !!result;
