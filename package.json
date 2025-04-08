@@ -55,7 +55,7 @@
     "react-window": "^1.8.11",
     "rss-parser": "^3.13.0",
     "uuid": "^11.0.5",
-    "vite": "^6.0.12",
+    "vite": "^6.0.14",
     "vite-plugin-node-polyfills": "^0.23.0"
   },
   "packageManager": "yarn@1.22.22"
