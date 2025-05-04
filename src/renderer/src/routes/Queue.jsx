@@ -1,4 +1,4 @@
-import { Button, Divider, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import DraggableItem from '../components/DraggableItem';
@@ -6,6 +6,7 @@ import DroppableList from '../components/DroppableList';
 import FileInput from '../components/FileInput';
 import ListTrack from '../components/ListTrack';
 import RssButton from '../components/RssButton';
+import Settings from '../components/Settings';
 import useStore from '../components/Store';
 import { processFile } from '../utils/processMetadata';
 
@@ -42,7 +43,10 @@ export function Component() {
 
   return (
     <Stack direction="row" spacing={1} sx={{ minHeight: '100%', p: 1 }}>
-      <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%' }} spacing={1}>
+      <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%', position: 'relative', top: '0px', right: '0px' }} spacing={1}>
+        <Box sx={{ position: 'absolute', right: '0px', top: '0px' }}>
+          <Settings />
+        </Box>
         <Typography variant="h5">Queue</Typography>
         <DroppableList
           sx={{ width: '100%' }}
