@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
+import usePresence from '../utils/usePresence';
 import useStore from './Store';
 import { ThemeToggle } from './Theme';
 
@@ -23,6 +24,7 @@ export default function Settings() {
   const [open, setOpen] = useState(false);
   const [updateCheckStatus, setUpdateCheckStatus] = useState('');
   const [betaState, setBetaState] = useState({ allowPrerelease: false, forcedPrerelease: false });
+  const { presenceSettings, setPresenceSettings } = usePresence();
 
   const checkForUpdates = useCallback(async () => {
     setUpdateCheckStatus('Checking for updates...');
@@ -129,7 +131,27 @@ export default function Settings() {
               </FormGroup>
             </Stack>
 
-            {window?.api && (
+            {window?.api?.presence && (
+              <Stack spacing={1}>
+                <Typography variant="h5">Discord Rich Presence</Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                  Display what you're listening to in your discord status
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={presenceSettings.enabled}
+                        onChange={(_, value) => setPresenceSettings('enabled', value)}
+                      />
+                    }
+                    label="Enabled"
+                  />
+                </FormGroup>
+              </Stack>
+            )}
+
+            {window?.api?.updates && (
               <Stack spacing={1}>
                 <Typography variant="h5">Updates</Typography>
                 <FormGroup>

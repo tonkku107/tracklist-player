@@ -13,6 +13,11 @@ const api = {
     getAllowPrerelease: () => ipcRenderer.invoke('updates:get-allow-prerelease'),
     setAllowPrerelease: value => ipcRenderer.invoke('updates:set-allow-prerelease', value),
   },
+  presence: {
+    getSettings: () => ipcRenderer.invoke('presence:get-settings'),
+    setSettings: (key, value) => ipcRenderer.invoke('presence:set-settings', key, value),
+    setActivity: status => ipcRenderer.send('presence:set-activity', status),
+  },
 };
 
 if (process.contextIsolated) {

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useStore from '../components/Store';
+import usePresence from './usePresence';
 
 const reset = { currentTime: 0, duration: 0, currentlyPlaying: undefined };
+
+const adTrack = { artist: '', title: 'Ads' };
 
 const getVolume = () => {
   const volume = parseFloat(localStorage.getItem('volume'));
@@ -19,6 +22,7 @@ export default function useAudio() {
     ...reset,
   }));
   const audioRef = useRef(null);
+  const { presenceSettings, setActivity } = usePresence();
 
   const track = useMemo(() => [...(store.queue?.values() ?? [])][state.queueIndex], [state.queueIndex, store.queue]);
 
@@ -47,7 +51,7 @@ export default function useAudio() {
       const offsetTime = time - (track.tracklistOffset ?? 0);
 
       let currentlyPlaying =
-        offsetTime < 0 ? { artist: '', title: 'Ads' } : track.tracklist.findLast(t => t.timestampSeconds <= offsetTime);
+        offsetTime < 0 ? adTrack : track.tracklist.findLast(t => t.timestampSeconds <= offsetTime);
 
       setState(s => ({ ...s, currentTime: time, currentlyPlaying }));
     };
@@ -106,6 +110,7 @@ export default function useAudio() {
       document.removeEventListener('keyup', onKeyup);
       audioRef.current.pause();
       audioRef.current = null;
+      setActivity(null);
     };
   }, [state.queueIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -116,9 +121,25 @@ export default function useAudio() {
         artist: state.currentlyPlaying?.artist ?? track?.artist,
         album: state.currentlyPlaying && (track?.title ?? track?.filename),
         artwork: track?.pictureUrl ? [{ src: track?.pictureUrl }] : [],
-      })
+      });
     }
-  }, [track, state.currentlyPlaying]);
+
+    if (presenceSettings.enabled) {
+      setActivity(
+        !state.paused
+          ? {
+              title: state.currentlyPlaying?.title ?? track?.title ?? track?.filename,
+              artist: state.currentlyPlaying?.artist ?? track?.artist,
+              album: state.currentlyPlaying && (track?.title ?? track?.filename),
+              cover: track?.pictureUrl,
+              currentTime: audioRef.current.currentTime,
+              duration: audioRef.current.duration,
+              link: track?._rss?.link,
+            }
+          : null
+      );
+    }
+  }, [track, state.currentlyPlaying, state.paused, presenceSettings.enabled]);
 
   const togglePlay = useCallback(() => {
     if (audioRef.current.paused) {
