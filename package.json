@@ -52,7 +52,6 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router": "^7.9.1",
-    "react-virtualized-auto-sizer": "^1.0.26",
     "react-window": "^2.1.1",
     "rss-parser": "^3.13.0",
     "uuid": "^13.0.0",

@@ -2,7 +2,6 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { Box, Button, Divider, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { Suspense, useCallback } from 'react';
 import { Await, Link, useLoaderData, useParams } from 'react-router';
-import AutoSizer from 'react-virtualized-auto-sizer';
 import { List } from 'react-window';
 import Parser from 'rss-parser';
 import { v4 as uuidv4 } from 'uuid';
@@ -87,22 +86,17 @@ export function Component() {
         </Box>
       </Stack>
 
-      <Stack sx={{ height: '100%' }}>
+      <Stack sx={{ height: '100%', overflow: 'auto' }}>
         <Suspense key={data.requestId} fallback={<Loading />}>
           <Await resolve={data.feed} errorElement={<p>Failed to load the feed!</p>}>
             {feed => (
-              <AutoSizer style={{ height: '100%' }}>
-                {({ height, width }) => (
-                  <List
-                    rowComponent={ListRow}
-                    rowHeight={80}
-                    rowCount={feed.items.length}
-                    rowProps={{ data: feed.items }}
-                    overscanCount={5}
-                    style={{ width, height }}
-                  />
-                )}
-              </AutoSizer>
+              <List
+                rowComponent={ListRow}
+                rowHeight={80}
+                rowCount={feed.items.length}
+                rowProps={{ data: feed.items }}
+                overscanCount={5}
+              />
             )}
           </Await>
         </Suspense>
