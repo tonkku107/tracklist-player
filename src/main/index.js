@@ -5,6 +5,7 @@ import Store from 'electron-store';
 import electronUpdater from 'electron-updater';
 import { join } from 'path';
 import icon from '../../resources/icon.png?asset';
+import PresenceHandler from './presence';
 
 const autoUpdater = electronUpdater.autoUpdater;
 autoUpdater.autoDownload = false;
@@ -147,6 +148,8 @@ ipcMain.handle('updates:set-allow-prerelease', (_, value) => {
   store.set('allowPrerelease', value);
   return { allowPrerelease: autoUpdater.allowPrerelease, forcedPrerelease };
 });
+
+new PresenceHandler(store, ipcMain);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
