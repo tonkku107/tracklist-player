@@ -15,15 +15,15 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
 
       - name: Install Dependencies
-        run: yarn install
+        run: yarn install --network-timeout 300000
 
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'

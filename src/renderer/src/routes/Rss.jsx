@@ -1,9 +1,8 @@
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Box, Button, Divider, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
-import { Suspense, memo, useCallback } from 'react';
+import { Suspense, useCallback } from 'react';
 import { Await, Link, useLoaderData, useParams } from 'react-router';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { FixedSizeList, areEqual } from 'react-window';
+import { List } from 'react-window';
 import Parser from 'rss-parser';
 import { v4 as uuidv4 } from 'uuid';
 import ListTrack from '../components/ListTrack';
@@ -42,10 +41,8 @@ export async function loader({ params, request }) {
   };
 }
 
-export function Component() {
+function ListRow({ index, data, style }) {
   const [store, dispatch] = useStore();
-  const { show } = useParams();
-  const data = useLoaderData();
 
   const addTrack = useCallback(
     async rssTrack => {
@@ -54,6 +51,25 @@ export function Component() {
     },
     [dispatch]
   );
+
+  const item = data[index];
+  const track = processRss(item);
+
+  return (
+    <ListTrack
+      key={item.guid}
+      track={track}
+      style={style}
+      exists={store.queue?.has(item.guid)}
+      onAdd={addTrack.bind(null, track)}
+    />
+  );
+}
+
+export function Component() {
+  const [store] = useStore();
+  const { show } = useParams();
+  const data = useLoaderData();
 
   return (
     <Stack sx={{ height: '100%', width: '100%' }}>
@@ -70,36 +86,17 @@ export function Component() {
         </Box>
       </Stack>
 
-      <Stack sx={{ height: '100%' }}>
+      <Stack sx={{ height: '100%', overflow: 'auto' }}>
         <Suspense key={data.requestId} fallback={<Loading />}>
           <Await resolve={data.feed} errorElement={<p>Failed to load the feed!</p>}>
             {feed => (
-              <AutoSizer>
-                {({ height, width }) => (
-                  <FixedSizeList
-                    height={height}
-                    width={width}
-                    itemSize={80}
-                    itemCount={feed.items.length}
-                    itemData={feed.items}
-                    overscanCount={5}
-                  >
-                    {memo(function ListRow({ data, index, style }) {
-                      const item = data[index];
-                      const track = processRss(item);
-                      return (
-                        <ListTrack
-                          key={item.guid}
-                          track={track}
-                          style={style}
-                          exists={store.queue?.has(item.guid)}
-                          onAdd={addTrack.bind(null, track)}
-                        />
-                      );
-                    }, areEqual)}
-                  </FixedSizeList>
-                )}
-              </AutoSizer>
+              <List
+                rowComponent={ListRow}
+                rowHeight={80}
+                rowCount={feed.items.length}
+                rowProps={{ data: feed.items }}
+                overscanCount={5}
+              />
             )}
           </Await>
         </Suspense>
