@@ -1,7 +1,7 @@
 {
   "name": "tracklist-player",
   "productName": "Tracklist Player",
-  "version": "1.3.1",
+  "version": "1.4.0-beta.0",
   "description": "An audio player application which is designed for playing mixes. It displays the currently playing track based on the timestamps in a tracklist.",
   "main": "./out/main/index.js",
   "type": "module",
