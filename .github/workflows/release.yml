@@ -23,7 +23,7 @@ jobs:
           node-version: 22
 
       - name: Install Dependencies
-        run: yarn install --network-timeout 300000
+        run: yarn install --network-timeout 300000 --frozen-lockfile
 
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
