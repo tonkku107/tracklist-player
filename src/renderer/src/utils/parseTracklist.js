@@ -1,5 +1,5 @@
 import { parseTimestamp } from './timestamp';
-const re = /(?:(?<special>.+):\n)?(?:\d+\. (?<l_track>.+?))?\[?(?<timestamp>\d+:\d+(?::\d+)?)\]?(?<r_track>.+)?/g;
+const re = /(?:(?<special>.+):\n+)?(?:\d+\. (?<l_track>.+?))?\[?(?<timestamp>\d+:\d+(?::\d+)?)\]?(?<r_track>.+)?/g;
 
 export default function parseTracklist(tracklist) {
   const parsed = [];

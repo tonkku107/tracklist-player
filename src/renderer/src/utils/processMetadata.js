@@ -43,7 +43,7 @@ export const processRss = item => {
     pictureUrl: item.itunes.image,
     thumbnailUrl: thumbnailUrl?.toString(),
     audioUrl: item.enclosure.url,
-    rawTracklist: item.contentSnippet,
+    rawTracklist: item['content:encodedSnippet'] ?? item.contentSnippet,
     duration: item.itunes.duration,
   };
 };
