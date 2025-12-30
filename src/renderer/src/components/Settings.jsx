@@ -17,7 +17,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import usePresence from '../utils/usePresence';
 import useStore from './Store';
-import { ThemeToggle } from './Theme';
+import { ThemeToggle, fontGothamOnly, fontMontserratOnly } from './Theme';
 
 export default function Settings() {
   const [store, dispatch] = useStore();
@@ -85,14 +85,25 @@ export default function Settings() {
               </Typography>
               <FormGroup>
                 <FormControlLabel
-                  slotProps={{ typography: { variant: 'mcat_body1' } }}
                   control={
                     <Switch
                       checked={store?.settings?.useFont ?? true}
                       onChange={(_, value) => dispatch({ type: 'SET_USE_FONT', value })}
                     />
                   }
-                  label="Use Gotham font"
+                  label={
+                    <Typography>
+                      Use{' '}
+                      <Typography component="span" sx={{ fontFamily: fontGothamOnly }}>
+                        Gotham
+                      </Typography>{' '}
+                      or{' '}
+                      <Typography component="span" sx={{ fontFamily: fontMontserratOnly }}>
+                        Montserrat
+                      </Typography>{' '}
+                      font
+                    </Typography>
+                  }
                 />
                 <Typography variant="caption" color="text.secondary">
                   You will need the font installed on your system to see it

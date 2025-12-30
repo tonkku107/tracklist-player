@@ -30,7 +30,8 @@ Call of the Wild style:
 ```
 
 ## Font
-If you have the "Gotham" fonts installed on your system, the track artist and title will be displayed using it to match Monstercat's style. The fonts are not included with the application.
+To match Monstercat's style, by default "Gotham" or "Montserrat" font will be used in uppercase letters. This can be changed in the settings.
+"Montserrat" will be used if the "Gotham" fonts are not installed on your system as they are not included with the application.
 
 ## Feedback and bug reports
 If you encounter any bugs, you can create an [issue](https://github.com/tonkku107/tracklist-player/issues). Be sure to include as much useful information as possible like the version and operating system.\
