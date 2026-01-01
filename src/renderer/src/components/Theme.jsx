@@ -7,10 +7,17 @@ import { alpha, createTheme, getContrastRatio, responsiveFontSizes } from '@mui/
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import '../font.css';
 
+const fontCommonFallback = '"Roboto","Helvetica","Arial",sans-serif';
+const fontGothamBook = '"Gotham Book"';
+const fontGothamBold = '"Gotham Bold"';
+const fontMontserrat = '"Montserrat Variable"';
+export const fontGothamOnly = `${fontGothamBook},${fontCommonFallback}`;
+export const fontMontserratOnly = `${fontMontserrat},${fontCommonFallback}`;
+const mcatFontFamily = `${fontGothamBook},${fontMontserrat},${fontCommonFallback}`;
+const mcatBoldFontFamily = `${fontGothamBold},${fontMontserrat},${fontCommonFallback}`;
+
 const getTheme = mode => {
   const rssColor = '#ee802f';
-  const mcatFontFamily = '"Gotham Book","Roboto","Helvetica","Arial",sans-serif';
-  const mcatBoldFontFamily = '"Gotham Bold","Roboto","Helvetica","Arial",sans-serif';
 
   let theme = createTheme({
     palette: {
@@ -36,6 +43,9 @@ const getTheme = mode => {
         fontSize: '3rem',
         lineHeight: 1.167,
         letterSpacing: '0em',
+        // Montserrat as a variable font uses this setting for weight instead
+        // which works out well in combination with Gotham's separate fonts for each weight
+        fontVariationSettings: '"wght" 700',
       },
       mcat_h4: {
         fontFamily: mcatFontFamily,
