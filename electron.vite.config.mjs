@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { execSync } from 'child_process';
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import { defineConfig } from 'electron-vite';
 import { resolve } from 'path';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
@@ -26,12 +26,9 @@ const define = {
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()],
     define,
   },
-  preload: {
-    plugins: [externalizeDepsPlugin()],
-  },
+  preload: {},
   renderer: {
     resolve: {
       alias: {
