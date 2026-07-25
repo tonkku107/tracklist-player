@@ -9,7 +9,7 @@ export default function ErrorPage() {
   const data = typeof routeError.data == 'object' ? JSON.stringify(routeError.data) : routeError.data?.toString();
 
   return (
-    <Stack direction="column" justifyContent="center" alignItems="center" spacing={3} sx={{ height: '100%', p: 2 }}>
+    <Stack direction="column" spacing={3} sx={{ height: '100%', p: 2, justifyContent: 'center', alignItems: 'center' }}>
       <Typography variant="h4">Something went wrong!</Typography>
       <Typography variant="h6">
         {routeError.status} {routeError.statusText}

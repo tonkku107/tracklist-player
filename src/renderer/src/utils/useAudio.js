@@ -50,8 +50,7 @@ export default function useAudio() {
 
       const offsetTime = time - (track.tracklistOffset ?? 0);
 
-      let currentlyPlaying =
-        offsetTime < 0 ? adTrack : track.tracklist.findLast(t => t.timestampSeconds <= offsetTime);
+      let currentlyPlaying = offsetTime < 0 ? adTrack : track.tracklist.findLast(t => t.timestampSeconds <= offsetTime);
 
       setState(s => ({ ...s, currentTime: time, currentlyPlaying }));
     };

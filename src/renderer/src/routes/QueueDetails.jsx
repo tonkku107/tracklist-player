@@ -50,7 +50,7 @@ export function Component() {
             value={input}
             onChange={e => setInput(e.target.value)}
           />
-          <Stack direction="row" justifyContent="end" spacing={1}>
+          <Stack direction="row" spacing={1} sx={{ justifyContent: 'end' }}>
             {track.tracklist && (
               <Button variant="outlined" onClick={cancel}>
                 Cancel

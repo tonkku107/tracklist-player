@@ -43,7 +43,10 @@ export function Component() {
 
   return (
     <Stack direction="row" spacing={1} sx={{ minHeight: '100%', p: 1 }}>
-      <Stack alignItems="center" sx={{ minWidth: '33%', maxWidth: '33%', position: 'relative', top: '0px', right: '0px' }} spacing={1}>
+      <Stack
+        sx={{ minWidth: '33%', maxWidth: '33%', position: 'relative', top: '0px', right: '0px', alignItems: 'center' }}
+        spacing={1}
+      >
         <Box sx={{ position: 'absolute', right: '0px', top: '0px' }}>
           <Settings />
         </Box>
@@ -74,7 +77,7 @@ export function Component() {
             />
           ))}
         </DroppableList>
-        <Stack justifyContent="center" alignItems="center" spacing={2} sx={{ width: 'fit-content' }}>
+        <Stack spacing={2} sx={{ width: 'fit-content', justifyContent: 'center', alignItems: 'center' }}>
           <FileInput onFiles={onFiles} />
           <RssButton />
           <Tooltip title={!canProceed && 'All entries need to have a tracklist'}>

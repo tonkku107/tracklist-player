@@ -79,7 +79,7 @@ export default function Settings() {
               <Typography variant="h5">Player preferences</Typography>
 
               <Typography variant="h6">Display</Typography>
-              <Typography variant="subtitle1" color="text.secondary">
+              <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
                 The font and use of all caps replicate the look on the MSS & COTW streams when they used to have video.
                 You can disable them here.
               </Typography>
@@ -105,7 +105,7 @@ export default function Settings() {
                     </Typography>
                   }
                 />
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   You will need the font installed on your system to see it
                 </Typography>
                 <FormControlLabel
@@ -145,7 +145,7 @@ export default function Settings() {
             {window?.api?.presence && (
               <Stack spacing={1}>
                 <Typography variant="h5">Discord Rich Presence</Typography>
-                <Typography variant="subtitle1" color="text.secondary">
+                <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
                   Display what you're listening to in your discord status
                 </Typography>
                 <FormGroup>
@@ -182,7 +182,7 @@ export default function Settings() {
                     Check for updates
                   </Button>
                 </Box>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   {updateCheckStatus}
                 </Typography>
               </Stack>

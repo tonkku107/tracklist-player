@@ -104,7 +104,7 @@ export function Component() {
 
       <Divider flexItem />
 
-      <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ p: 1 }}>
+      <Stack direction="row" sx={{ p: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <Typography>
           {store.queue?.size ?? 0} {store.queue?.size === 1 ? 'item' : 'items'} in queue
         </Typography>
