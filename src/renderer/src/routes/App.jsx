@@ -20,18 +20,18 @@ export function Component() {
   };
 
   return (
-    <Stack justifyContent="center" alignItems="center" sx={{ height: '100%', position: 'relative' }}>
+    <Stack sx={{ height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center' }}>
       <Box sx={{ position: 'absolute', right: '24px', top: '24px' }}>
         <Settings />
       </Box>
 
-      <Stack justifyContent="center" alignItems="center" spacing={2} sx={{ width: 'fit-content' }}>
+      <Stack spacing={2} sx={{ width: 'fit-content', justifyContent: 'center', alignItems: 'center' }}>
         <FileInput onFiles={onFiles} />
         <RssButton />
       </Stack>
 
       <Box sx={{ position: 'absolute', left: '24px', bottom: '24px' }}>
-        <Link href={__REPO__} target="_blank" underline="hover" variant="caption" color="text.primary">
+        <Link href={__REPO__} target="_blank" underline="hover" variant="caption" sx={{ color: 'text.primary' }}>
           v{__VERSION__} ({__COMMIT__})
         </Link>
       </Box>

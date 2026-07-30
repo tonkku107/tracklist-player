@@ -55,10 +55,10 @@ export function Component() {
     <Stack sx={{ height: '100%', p: 2 }} spacing={2}>
       <Typography variant={bodyVariant}>{currentlyPlaying && transformText(fileTitleText)}</Typography>
 
-      <Stack justifyContent="end" sx={{ flexGrow: 1 }}>
+      <Stack sx={{ flexGrow: 1, justifyContent: 'end' }}>
         {/* <img> was being annoying so this is the workaround :) */}
         {track?.pictureUrl && (
-          <Stack justifyContent="center" alignItems="center" sx={{ height: '100%', mb: 2 }}>
+          <Stack sx={{ height: '100%', mb: 2, justifyContent: 'center', alignItems: 'center' }}>
             <Box
               sx={{
                 backgroundImage: `url(${track.pictureUrl})`,
@@ -73,21 +73,21 @@ export function Component() {
         <Typography variant={h4Variant}>{transformText(titleText)}</Typography>
       </Stack>
 
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
         <Typography>{stringTimestamp(currentTime)}</Typography>
         <Slider min={0} max={duration} value={currentTime} onChange={seek} />
         <Typography>{stringTimestamp(duration)}</Typography>
       </Stack>
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" justifyContent="start" sx={{ flexGrow: 1, flexBasis: 0 }}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+        <Stack direction="row" sx={{ flexGrow: 1, flexBasis: 0, justifyContent: 'start' }}>
           <IconButton size="large" onClick={() => navigate('/queue')}>
             <QueueMusicIcon fontSize="inherit" />
           </IconButton>
           {track?._debug && <DebugInfoDialog data={track._debug} />}
         </Stack>
 
-        <Stack direction="row" justifyContent="center" spacing={2} sx={{ mx: 6 }}>
+        <Stack direction="row" spacing={2} sx={{ mx: 6, justifyContent: 'center' }}>
           <IconButton size="large" disabled={!canPrevious} onClick={previous}>
             <SkipPreviousIcon fontSize="inherit" />
           </IconButton>
@@ -107,10 +107,8 @@ export function Component() {
 
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="end"
           spacing={2}
-          sx={{ flexGrow: 1, flexBasis: 0, mr: 2 }}
+          sx={{ flexGrow: 1, flexBasis: 0, mr: 2, alignItems: 'center', justifyContent: 'end' }}
         >
           <IconButton onClick={toggleMute}>
             {muted ? (
