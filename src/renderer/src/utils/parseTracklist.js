@@ -12,7 +12,7 @@ export default function parseTracklist(tracklist) {
     let artist = artistMatch.trim();
     let title = titleParts.join(' - ').trim();
 
-    if (match.groups.special) {
+    if (match.groups.special && !match.groups.special.toLowerCase().includes('tracklist')) {
       title += ` [${match.groups.special}]`;
     }
 
