@@ -2,7 +2,7 @@
   "name": "tracklist-player",
   "productName": "Tracklist Player",
   "desktopName": "me.tonkku.tracklist-player",
-  "version": "1.4.3",
+  "version": "1.4.4-beta.0",
   "description": "An audio player application which is designed for playing mixes. It displays the currently playing track based on the timestamps in a tracklist.",
   "main": "./out/main/index.js",
   "type": "module",
