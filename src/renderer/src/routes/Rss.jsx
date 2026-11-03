@@ -13,6 +13,7 @@ import { finalizeRss, processRss } from '../utils/processMetadata';
 const shows = {
   mss: 'https://feeds.megaphone.fm/MSC5503498991',
   cotw: 'https://feeds.megaphone.fm/MSC1713576256',
+  mmc: 'https://feeds.megaphone.fm/MSC7554672879',
 };
 
 export async function loader({ params, request }) {
@@ -77,6 +78,7 @@ export function Component() {
         <Tabs value={show} centered sx={{ mb: 1 }}>
           <Tab label="Monstercat Silk Showcase" value="mss" to="/rss/mss" component={Link} />
           <Tab label="Monstercat Call of the Wild" value="cotw" to="/rss/cotw" component={Link} />
+          <Tab label="Monstercat Mix Contest" value="mmc" to="/rss/mmc" component={Link} />
         </Tabs>
 
         <Box sx={{ position: 'absolute', right: '8px', top: '8px' }}>

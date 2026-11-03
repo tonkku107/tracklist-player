@@ -73,7 +73,7 @@ export function Component() {
               track={t}
               selected={id === t.id}
               onDelete={() => dispatch({ type: 'DELETE_TRACK_FROM_QUEUE', id: t.id })}
-              onClick={() => navigate(`/queue/${t.id}`)}
+              onClick={() => navigate(`/queue/${encodeURIComponent(t.id)}`)}
             />
           ))}
         </DroppableList>
